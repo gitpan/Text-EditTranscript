@@ -1,6 +1,6 @@
 Revision history for Perl extension Text::EditTranscript.
 
 0.01  Mon Dec  8 18:50:53 2008
-	- original version; created by h2xs 1.23 with options
-		--omit-autoload --omit-xs Text::EditTranscript
-
+	- original version; 
+0.02  Mon Dec 8 19:00:00 2008	
+	- fixed documentation
