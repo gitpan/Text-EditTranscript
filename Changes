@@ -4,3 +4,7 @@ Revision history for Perl extension Text::EditTranscript.
 	- original version; 
 0.02  Mon Dec 8 19:00:00 2008	
 	- fixed documentation
+0.03  Sun Dec 21 21:00:00 2008
+	- Removed recursion from the Traceback function.  This was causing 
+	  problems if the string was longer than 100 characters.  Added a test
+	  for long strings.

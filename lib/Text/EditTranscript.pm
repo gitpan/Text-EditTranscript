@@ -25,7 +25,7 @@ our @EXPORT = qw(
 	EditTranscript
 );
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 
 sub EditTranscript {
@@ -72,8 +72,7 @@ sub EditTranscript {
 		}
 	}
 
-	my $tmp = "";
-	my $st = Traceback($transcript,length($str),length($str2),$tmp);
+	my $st = Traceback($transcript,length($str),length($str2));
 	$st = scalar reverse $st;
 	return $st;
 
@@ -83,24 +82,27 @@ sub Traceback {
 	my $transcript = shift;
 	my $i = shift;
 	my $j = shift;
-	my $string = shift;
 
-	if (defined $transcript->[$i]->[$j]) {
-		$string .= $transcript->[$i]->[$j];
-	}
-	if ($i eq 0  && $j eq 0) { 
-		return $string;
-	 }
+	my $string;
+	while ($i != 0 && $j != 0) {
+		
+		if (defined $transcript->[$i]->[$j]) {
+			$string .= $transcript->[$i]->[$j];
+		}
 
-	if ($transcript->[$i]->[$j] eq "S" || $transcript->[$i]->[$j] eq "-") {
-		return Traceback($transcript,$i-1,$j-1,$string);
+		if ($transcript->[$i]->[$j] eq "S" || $transcript->[$i]->[$j] eq "-") {
+			$i = $i - 1;
+			$j = $j - 1;
+		}
+		elsif ($transcript->[$i]->[$j] eq "I") {
+			$j = $j - 1;
+		}
+		else {
+			$i = $i - 1;
+		}
 	}
-	elsif ($transcript->[$i]->[$j] eq "I") {
-		return Traceback($transcript,$i,$j-1,$string);
-	}
-	else {
-		return Traceback($transcript,$i-1,$j,$string);
-	}
+
+	return $string;
 }
 
 sub Min {
