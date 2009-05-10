@@ -8,3 +8,10 @@ Revision history for Perl extension Text::EditTranscript.
 	- Removed recursion from the Traceback function.  This was causing 
 	  problems if the string was longer than 100 characters.  Added a test
 	  for long strings.
+0.04  Sat May 9 21:00:00 2009
+	- Fixed a major bug in the calculation of the transcript.  The
+          values for Deletion and Insertion should be checked prior to 
+	  the values for Substitution and 'No action'.  I had this backwards
+	  and my initial tests didn't catch it.  It was only when I compared
+	  the values of 'GET' and 'POST' that I found the error.  Also updated
+	  the tests to reflect the correct values.

@@ -25,7 +25,7 @@ our @EXPORT = qw(
 	EditTranscript
 );
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 
 sub EditTranscript {
@@ -54,19 +54,19 @@ sub EditTranscript {
 			$dist->[$i]->[$j] = Min($dist->[$i-1]->[$j] + 1,
 						$dist->[$i]->[$j-1] + 1,
 						$dist->[$i-1]->[$j-1] + $cost);
-			if ($dist->[$i]->[$j] eq  $dist->[$i-1]->[$j-1] + $cost) {
+			if ($dist->[$i]->[$j] eq $dist->[$i-1]->[$j]+1) {
+				$transcript->[$i]->[$j] = "D";
+			}
+			elsif ($dist->[$i]->[$j] eq $dist->[$i]->[$j-1] + 1) {
+				$transcript->[$i]->[$j] = "I";
+			}
+			else {
 				if ($cost eq 0) {
 					$transcript->[$i]->[$j] = "-";
 				}
 				else {
 					$transcript->[$i]->[$j] = "S";
 				}
-			}
-			elsif ($dist->[$i]->[$j] eq $dist->[$i-1]->[$j]+1) {
-				$transcript->[$i]->[$j] = "D";
-			}
-			else {
-				$transcript->[$i]->[$j] = "I";
 			}
 			
 		}
