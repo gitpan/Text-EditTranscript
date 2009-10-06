@@ -25,7 +25,7 @@ our @EXPORT = qw(
 	EditTranscript
 );
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 
 sub EditTranscript {
@@ -36,10 +36,13 @@ sub EditTranscript {
 	my $transcript;
 	for (my $i = 0; $i <= length($str); $i++) {
 		$dist->[$i]->[0] = $i;
+		$transcript->[$i]->[0] = "D";
 	}
 	for (my $i = 0; $i <= length($str2); $i++) {
 		$dist->[0]->[$i] = $i;
+		$transcript->[0]->[$i] = "I";
 	}
+
 
 	my $cost;
 
@@ -54,13 +57,13 @@ sub EditTranscript {
 			$dist->[$i]->[$j] = Min($dist->[$i-1]->[$j] + 1,
 						$dist->[$i]->[$j-1] + 1,
 						$dist->[$i-1]->[$j-1] + $cost);
+			if ($dist->[$i]->[$j] eq $dist->[$i]->[$j-1] + 1) {
+				$transcript->[$i]->[$j] = "I";
+			}
 			if ($dist->[$i]->[$j] eq $dist->[$i-1]->[$j]+1) {
 				$transcript->[$i]->[$j] = "D";
 			}
-			elsif ($dist->[$i]->[$j] eq $dist->[$i]->[$j-1] + 1) {
-				$transcript->[$i]->[$j] = "I";
-			}
-			else {
+			if ($dist->[$i]->[$j] eq  $dist->[$i-1]->[$j-1] + $cost) {
 				if ($cost eq 0) {
 					$transcript->[$i]->[$j] = "-";
 				}
@@ -68,7 +71,6 @@ sub EditTranscript {
 					$transcript->[$i]->[$j] = "S";
 				}
 			}
-			
 		}
 	}
 
@@ -84,26 +86,29 @@ sub Traceback {
 	my $j = shift;
 
 	my $string;
-	while ($i != 0 && $j != 0) {
-		
+
+	while ($i > 0 || $j > 0) {
 		if (defined $transcript->[$i]->[$j]) {
 			$string .= $transcript->[$i]->[$j];
 		}
 
+		last if (!defined $transcript->[$i]->[$j]);  
+				# to keep us from getting caught in loops
 		if ($transcript->[$i]->[$j] eq "S" || $transcript->[$i]->[$j] eq "-") {
-			$i = $i - 1;
-			$j = $j - 1;
+			$i-- if ($i > 0);
+			$j-- if ($j > 0);
 		}
 		elsif ($transcript->[$i]->[$j] eq "I") {
-			$j = $j - 1;
+			$j-- if ($j > 0);
 		}
 		else {
-			$i = $i - 1;
+			$i-- if ($i > 0);
 		}
 	}
 
 	return $string;
 }
+
 
 sub Min {
 	my @list = @_;
