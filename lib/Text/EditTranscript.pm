@@ -25,7 +25,7 @@ our @EXPORT = qw(
 	EditTranscript
 );
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 
 sub EditTranscript {

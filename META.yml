@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:               Text-EditTranscript
-version:            0.05
+version:            0.06
 abstract:           Perl extension for determining the edit transcript between two strings
 author:
     - leigh <leigh@apple.com>
